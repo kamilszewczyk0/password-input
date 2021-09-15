@@ -3,12 +3,15 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {GlobalWrapper} from "./styles/Wrappers/GlobalWrapper";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <GlobalWrapper>
+      <App />
+    </GlobalWrapper>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root"),
 );
 
 // If you want to start measuring performance in your app, pass a function

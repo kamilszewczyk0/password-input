@@ -1,25 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import PasswordInput from "./Components/PasswordInput/PasswordInput";
+
+const pass = "password";
 
 function App() {
   return (
     <div>
-      <input type="text" />
+      <PasswordInput password={pass} />
     </div>
   );
 }
 
 export default App;
 
-
 // dupa123
 
 // [d,u,p,a,1,2,3] czyli ile inputów realnie ma hasło
 
-
-
 // [*,*,p,a,*,*,3]
-
 
 // const map = {
 //   2:'p',
@@ -27,7 +24,6 @@ export default App;
 //   6:'3'
 // }
 // [*,*,p,a,*,*,3]
-
 
 // ile inputów powienien widzieć człowiek od 7 do 14
 // [*,*,p,a,*,*,3] któ©e z liter użytkownik ma podać
