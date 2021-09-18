@@ -1,6 +1,6 @@
 import PasswordInput from "./Components/PasswordInput/PasswordInput";
 
-const pass = "password";
+const pass = "qwerty";
 
 function App() {
   return (

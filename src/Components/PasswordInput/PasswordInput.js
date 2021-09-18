@@ -1,17 +1,66 @@
+import {useState, useCallback, useEffect, useMemo} from "react";
+import generatePasswordData from "../../hooks/generatePasswordData";
 import {SinglePasswordInput} from "../../styles/SinglePasswordInput/SinglePasswordInput";
 
 const PasswordInput = ({password}) => {
-  const passwordArray = password.split("");
+  const [inputsLength, initialStateValues, correctValuesMap] = useMemo(
+    () => generatePasswordData(password),
+    [password],
+  );
 
-  return passwordArray.map((char, index) => {
+  const [inputValues, setInputValues] = useState(initialStateValues);
+
+  const [inputsToIterate, setInputFields] = useState([]);
+
+  const handleChange = useCallback(
+    (e) => {
+      setInputValues({...inputValues, [e.target.name]: e.target.value});
+    },
+    [setInputValues, inputValues],
+  );
+
+  useEffect(() => {
+    // console.log("inputsLength", inputsLength);
+    setInputFields(new Array(inputsLength).fill(""));
+  }, [inputsLength]);
+
+  // useEffect(() => {
+  //   console.log({inputValues, password, inputsToIterate, inputsLength});
+  // }, []);
+
+  // useEffect(() => {
+  //   console.log({inputValues, password, inputsToIterate, inputsLength});
+  // }, [inputsToIterate]);
+
+  if (inputsToIterate.length === 0) {
+    return null;
+  }
+
+  const activeIndexesArray = Object.keys(correctValuesMap).map((item) =>
+    parseInt(item, 10),
+  );
+
+  const isActive = (inputIndex) =>
+    activeIndexesArray.some((index) => index === inputIndex);
+
+  console.log("correctResults", correctValuesMap);
+  console.log(activeIndexesArray);
+
+  const finalInput = inputsToIterate.map((_, index) => {
+    // console.log(isActive(index));
     return (
       <SinglePasswordInput
         maxLength="1"
         key={index}
-        disabled={index % 2 === 0}
+        name={index}
+        disabled={!isActive(index)}
+        onChange={handleChange}
+        value={inputValues[index]}
       />
     );
   });
+
+  return finalInput;
 };
 
 export default PasswordInput;
