@@ -24,14 +24,6 @@ const PasswordInput = ({password}) => {
     setInputFields(new Array(inputsLength).fill(""));
   }, [inputsLength]);
 
-  // useEffect(() => {
-  //   console.log({inputValues, password, inputsToIterate, inputsLength});
-  // }, []);
-
-  // useEffect(() => {
-  //   console.log({inputValues, password, inputsToIterate, inputsLength});
-  // }, [inputsToIterate]);
-
   if (inputsToIterate.length === 0) {
     return null;
   }
