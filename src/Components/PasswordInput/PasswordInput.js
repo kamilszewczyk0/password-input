@@ -1,5 +1,5 @@
 import {useState, useCallback, useEffect, useMemo} from "react";
-import generatePasswordData from "../../hooks/generatePasswordData";
+import generatePasswordData from "../generatePasswordData/generatePasswordData";
 import {SinglePasswordInput} from "../../styles/SinglePasswordInput/SinglePasswordInput";
 
 const PasswordInput = ({password}) => {
@@ -8,9 +8,26 @@ const PasswordInput = ({password}) => {
     [password],
   );
 
+  const [onSuccess, setOnSuccess] = useState(false);
+
   const [inputValues, setInputValues] = useState(initialStateValues);
 
   const [inputsToIterate, setInputFields] = useState([]);
+
+  const checkIfAllInputsHaveValues = Object.values(inputValues).every(
+    (char) => char.length !== 0,
+  );
+
+  const checkInputsValues = useCallback(() => {
+    const passwordValues = Object.values(correctValuesMap);
+    const givenValues = Object.values(inputValues);
+
+    const allInputsFilled = passwordValues.every(
+      (_, index) => passwordValues[index] === givenValues[index],
+    );
+    console.log(allInputsFilled);
+    if (allInputsFilled) setOnSuccess(true);
+  }, [correctValuesMap, inputValues]);
 
   const handleChange = useCallback(
     (e) => {
@@ -20,7 +37,12 @@ const PasswordInput = ({password}) => {
   );
 
   useEffect(() => {
-    // console.log("inputsLength", inputsLength);
+    if (checkIfAllInputsHaveValues) {
+      console.log(checkInputsValues());
+    }
+  }, [inputValues, checkIfAllInputsHaveValues, checkInputsValues]);
+
+  useEffect(() => {
     setInputFields(new Array(inputsLength).fill(""));
   }, [inputsLength]);
 
@@ -35,8 +57,9 @@ const PasswordInput = ({password}) => {
   const isActive = (inputIndex) =>
     activeIndexesArray.some((index) => index === inputIndex);
 
-  console.log("correctResults", correctValuesMap);
-  console.log(activeIndexesArray);
+  // console.log("correctResults", correctValuesMap);
+  // console.log(activeIndexesArray);
+  // console.log(inputValues);
 
   const finalInput = inputsToIterate.map((_, index) => {
     // console.log(isActive(index));
@@ -48,11 +71,12 @@ const PasswordInput = ({password}) => {
         disabled={!isActive(index)}
         onChange={handleChange}
         value={inputValues[index]}
+        type="password"
       />
     );
   });
 
-  return finalInput;
+  return [finalInput];
 };
 
 export default PasswordInput;
