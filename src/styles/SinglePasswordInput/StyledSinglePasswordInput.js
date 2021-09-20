@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const SinglePasswordInput = styled.input`
+export const StyledSinglePasswordInput = styled.input`
   width: 45px;
   height: 65px;
   border: 1px solid #000;

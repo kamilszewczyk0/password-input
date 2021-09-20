@@ -1,11 +1,14 @@
 import PasswordInput from "./Components/PasswordInput/PasswordInput";
 
 const pass = "qwerty";
+const onSuccess = (state) => {
+  return state ? `Password correct` : `Enter correct password`;
+};
 
 function App() {
   return (
     <div>
-      <PasswordInput password={pass} />
+      <PasswordInput password={pass} onSuccess={onSuccess} />
     </div>
   );
 }
