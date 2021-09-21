@@ -1,4 +1,11 @@
-import {useState, useCallback, useEffect, useMemo, useRef} from "react";
+import {
+  useState,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  createRef,
+} from "react";
 import generatePasswordData from "../generatePasswordData/generatePasswordData";
 import SinglePasswordInput from "../../Components/SinglePasswordInput/SinglePasswordInput.js";
 
@@ -9,12 +16,15 @@ const PasswordInput = ({password, onSuccess}) => {
   );
 
   const [inputValues, setInputValues] = useState(initialStateValues);
-
   const [inputsToIterate, setInputFields] = useState([]);
-
   const [passwordShown, setPasswordShown] = useState(false);
 
+  const [inputReff, setInputRef] = useState([]);
   const inputRef = useRef([]);
+
+  inputRef.current = inputsToIterate.map(
+    (_, index) => inputRef.current[index] ?? createRef(),
+  );
 
   const checkIfAllInputsHaveValues = Object.values(inputValues).every(
     (char) => char.length !== 0,
@@ -28,16 +38,22 @@ const PasswordInput = ({password, onSuccess}) => {
       (_, index) => passwordValues[index] === givenValues[index],
     );
 
-    if (allInputsFilled) {
-      onSuccess(inputValues);
-    }
+    onSuccess(allInputsFilled);
+    console.log(onSuccess(allInputsFilled));
   }, [correctValuesMap, inputValues, onSuccess]);
 
   const handleChange = useCallback(
     (e) => {
       setInputValues({...inputValues, [e.target.name]: e.target.value});
+      if (inputReff.current) {
+        const emptyEnabledInputsArray = inputReff.current.filter(
+          (item) => !item.current.disabled && !item.current.value,
+        );
+        if (emptyEnabledInputsArray.length)
+          emptyEnabledInputsArray[0].current.focus();
+      }
     },
-    [setInputValues, inputValues],
+    [setInputValues, inputValues, inputReff],
   );
 
   const handleButtonClick = () => {
@@ -51,7 +67,7 @@ const PasswordInput = ({password, onSuccess}) => {
   }, [inputValues, checkIfAllInputsHaveValues, checkInputsValues]);
 
   useEffect(() => {
-    console.log(inputRef.current[6]);
+    setInputRef(inputRef);
   }, [inputRef]);
 
   useEffect(() => {
@@ -74,7 +90,7 @@ const PasswordInput = ({password, onSuccess}) => {
     return (
       <SinglePasswordInput
         autoFocus={index === activeIndexesArray[0]}
-        ref={(r) => (inputRef.current[index] = r)}
+        ref={inputRef.current[index]}
         maxLength="1"
         key={index}
         name={index}
@@ -92,7 +108,7 @@ const PasswordInput = ({password, onSuccess}) => {
       <button onClick={handleButtonClick}>
         {passwordShown ? `Hide` : `Show`} password
       </button>
-      {onSuccess && <p>{onSuccess}</p>}
+      {<p>{onSuccess()}</p>}
     </>
   );
 };

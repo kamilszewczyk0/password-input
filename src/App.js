@@ -1,8 +1,15 @@
 import PasswordInput from "./Components/PasswordInput/PasswordInput";
 
 const pass = "qwerty";
-const onSuccess = (state) => {
-  return state ? `Password correct` : `Enter correct password`;
+const onSuccess = (boolean) => {
+  switch (boolean) {
+    case true:
+      return "Password correct";
+    case false:
+      return "Enter correct password";
+    default:
+      return null;
+  }
 };
 
 function App() {
