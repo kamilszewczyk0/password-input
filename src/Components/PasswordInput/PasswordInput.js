@@ -65,10 +65,12 @@ const PasswordInput = ({password, onSuccess}) => {
     setPasswordShown(!passwordShown);
   };
 
-  const handleResetClick = () => {
-    settingFocus(inputReff);
+  const handleResetClick = useCallback(() => {
     setInputValues(initialStateValues);
-  };
+    setTimeout(() => {
+      settingFocus(inputReff);
+    }, 0);
+  }, [inputReff, initialStateValues]);
 
   useEffect(() => {
     if (checkIfAllInputsHaveValues) {
