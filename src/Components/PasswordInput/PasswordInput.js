@@ -30,6 +30,16 @@ const PasswordInput = ({password, onSuccess}) => {
     (char) => char.length !== 0,
   );
 
+  const settingFocus = (array) => {
+    if (array.current) {
+      const emptyEnabledInputsArray = array.current.filter(
+        (item) => !item.current.disabled && !item.current.value,
+      );
+      if (emptyEnabledInputsArray.length)
+        emptyEnabledInputsArray[0].current.focus();
+    }
+  };
+
   const checkInputsValues = useCallback(() => {
     const passwordValues = Object.values(correctValuesMap);
     const givenValues = Object.values(inputValues);
@@ -46,19 +56,18 @@ const PasswordInput = ({password, onSuccess}) => {
   const handleChange = useCallback(
     (e) => {
       setInputValues({...inputValues, [e.target.name]: e.target.value});
-      if (inputReff.current) {
-        const emptyEnabledInputsArray = inputReff.current.filter(
-          (item) => !item.current.disabled && !item.current.value,
-        );
-        if (emptyEnabledInputsArray.length)
-          emptyEnabledInputsArray[0].current.focus();
-      }
+      settingFocus(inputReff);
     },
     [setInputValues, inputValues, inputReff],
   );
 
   const handleButtonClick = () => {
     setPasswordShown(!passwordShown);
+  };
+
+  const handleResetClick = () => {
+    settingFocus(inputReff);
+    setInputValues(initialStateValues);
   };
 
   useEffect(() => {
@@ -103,15 +112,13 @@ const PasswordInput = ({password, onSuccess}) => {
     );
   });
 
-  const passwordResult = onSuccess();
-  console.log(passwordResult);
-
   return (
     <>
       {finalInput}
       <button onClick={handleButtonClick}>
         {passwordShown ? `Hide` : `Show`} password
       </button>
+      <button onClick={handleResetClick}>Reset password</button>
       <p>{checkInputsValues()}</p>
     </>
   );
