@@ -34,12 +34,13 @@ const PasswordInput = ({password, onSuccess}) => {
     const passwordValues = Object.values(correctValuesMap);
     const givenValues = Object.values(inputValues);
 
+    const ifAllInputsFilled = givenValues.every((item) => item.length);
+
     const allInputsFilled = passwordValues.every(
       (_, index) => passwordValues[index] === givenValues[index],
     );
 
-    onSuccess(allInputsFilled);
-    console.log(onSuccess(allInputsFilled));
+    return ifAllInputsFilled ? onSuccess(allInputsFilled) : null;
   }, [correctValuesMap, inputValues, onSuccess]);
 
   const handleChange = useCallback(
@@ -102,13 +103,16 @@ const PasswordInput = ({password, onSuccess}) => {
     );
   });
 
+  const passwordResult = onSuccess();
+  console.log(passwordResult);
+
   return (
     <>
       {finalInput}
       <button onClick={handleButtonClick}>
         {passwordShown ? `Hide` : `Show`} password
       </button>
-      {<p>{onSuccess()}</p>}
+      <p>{checkInputsValues()}</p>
     </>
   );
 };
