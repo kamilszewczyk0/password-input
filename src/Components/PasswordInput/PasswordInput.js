@@ -5,6 +5,7 @@ import {
   useMemo,
   useRef,
   createRef,
+  useReducer,
 } from "react";
 import generatePasswordData from "../generatePasswordData/generatePasswordData";
 import SinglePasswordInput from "../../Components/SinglePasswordInput/SinglePasswordInput.js";
@@ -15,7 +16,28 @@ const PasswordInput = ({password, onSuccess}) => {
     [password],
   );
 
-  const [inputValues, setInputValues] = useState(initialStateValues);
+  const initialReducerValues = {
+    inputValues: {...initialStateValues},
+    inputsToIterate: [],
+  };
+
+  const reducer = (state, action) => {
+    switch (action.type) {
+      case "ON_CHANGE":
+        return {
+          ...state,
+          inputValues: {...state.inputValues, [action.field]: action.payload},
+        };
+      case "LOAD_INPUTS":
+        return new Array(action.payload).fill("");
+      default:
+        return state;
+    }
+  };
+
+  const [{inputValues}, dispatch] = useReducer(reducer, initialReducerValues);
+  console.log(inputValues);
+
   const [inputsToIterate, setInputFields] = useState([]);
   const [passwordShown, setPasswordShown] = useState(false);
 
@@ -24,10 +46,6 @@ const PasswordInput = ({password, onSuccess}) => {
 
   inputRef.current = inputsToIterate.map(
     (_, index) => inputRef.current[index] ?? createRef(),
-  );
-
-  const checkIfAllInputsHaveValues = Object.values(inputValues).every(
-    (char) => char.length !== 0,
   );
 
   const settingFocus = (array) => {
@@ -44,7 +62,7 @@ const PasswordInput = ({password, onSuccess}) => {
     const passwordValues = Object.values(correctValuesMap);
     const givenValues = Object.values(inputValues);
 
-    const ifAllInputsFilled = givenValues.every((item) => item.length);
+    const ifAllInputsFilled = givenValues.every((item) => item && item.length);
 
     const allInputsFilled = passwordValues.every(
       (_, index) => passwordValues[index] === givenValues[index],
@@ -55,10 +73,14 @@ const PasswordInput = ({password, onSuccess}) => {
 
   const handleChange = useCallback(
     (e) => {
-      setInputValues({...inputValues, [e.target.name]: e.target.value});
+      dispatch({
+        type: "ON_CHANGE",
+        field: e.target.name,
+        payload: e.target.value,
+      });
       settingFocus(inputReff);
     },
-    [setInputValues, inputValues, inputReff],
+    [dispatch, inputReff],
   );
 
   const handleButtonClick = () => {
@@ -66,17 +88,28 @@ const PasswordInput = ({password, onSuccess}) => {
   };
 
   const handleResetClick = useCallback(() => {
-    setInputValues(initialStateValues);
+    for (const value in inputValues) {
+      if (inputValues.hasOwnProperty(value))
+        dispatch({
+          type: "ON_CHANGE",
+          field: value,
+          payload: "",
+        });
+    }
+
     setTimeout(() => {
       settingFocus(inputReff);
     }, 0);
-  }, [inputReff, initialStateValues]);
+  }, [inputReff, inputValues]);
 
   useEffect(() => {
+    const checkIfAllInputsHaveValues = Object.values(inputValues).every(
+      (char) => char && char.length !== 0,
+    );
     if (checkIfAllInputsHaveValues) {
       checkInputsValues();
     }
-  }, [inputValues, checkIfAllInputsHaveValues, checkInputsValues]);
+  }, [inputValues, checkInputsValues]);
 
   useEffect(() => {
     setInputRef(inputRef);
@@ -85,6 +118,7 @@ const PasswordInput = ({password, onSuccess}) => {
   useEffect(() => {
     //montowanie komponenty=u
     setInputFields(new Array(inputsLength).fill(""));
+    // dispatch({type: "LOAD_INPUTS", payload: inputsLength});
   }, [inputsLength]);
 
   if (inputsToIterate.length === 0) {
