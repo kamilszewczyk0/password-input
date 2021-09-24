@@ -10,18 +10,17 @@ import {
 import generatePasswordData from "../generatePasswordData/generatePasswordData";
 import SinglePasswordInput from "../../Components/SinglePasswordInput/SinglePasswordInput.js";
 
-
 const PasswordInput = ({password, onSuccess}) => {
   const [inputsLength, initialStateValues, correctValuesMap] = useMemo(
     () => generatePasswordData(password),
     [password],
   );
 
-  // const [...] = usePassword(password)
-
   const initialReducerValues = {
     inputValues: {...initialStateValues},
     inputsToIterate: [],
+    passwordVisible: false,
+    inputRefs: [],
   };
 
   const reducer = (state, action) => {
@@ -36,19 +35,25 @@ const PasswordInput = ({password, onSuccess}) => {
           ...state,
           inputsToIterate: new Array(action.payload).fill(""),
         };
+      case "SHOW_HIDE_PASSWORD":
+        return {
+          ...state,
+          passwordVisible: !state.passwordVisible,
+        };
+      case "SET_REFS":
+        return {
+          ...state,
+          inputRefs: action.payload,
+        };
       default:
         return state;
     }
   };
 
-  const [{inputValues, inputsToIterate}, dispatch] = useReducer(
-    reducer,
-    initialReducerValues,
-  );
-  const [passwordShown, setPasswordShown] = useState(false);
+  const [{inputValues, inputsToIterate, passwordVisible, inputRefs}, dispatch] =
+    useReducer(reducer, initialReducerValues);
 
-  const [inputReff, setInputRef] = useState([]);
-  const inputRef = useRef([]);
+  const inputRef = useRef();
 
   inputRef.current = inputsToIterate.map(
     (_, index) => inputRef.current[index] ?? createRef(),
@@ -84,13 +89,13 @@ const PasswordInput = ({password, onSuccess}) => {
         field: e.target.name,
         payload: e.target.value,
       });
-      settingFocus(inputReff);
+      settingFocus(inputRefs);
     },
-    [dispatch, inputReff],
+    [dispatch, inputRefs],
   );
 
   const handleButtonClick = () => {
-    setPasswordShown(!passwordShown);
+    dispatch({type: "SHOW_HIDE_PASSWORD"});
   };
 
   const handleResetClick = useCallback(() => {
@@ -104,9 +109,9 @@ const PasswordInput = ({password, onSuccess}) => {
     }
 
     setTimeout(() => {
-      settingFocus(inputReff);
+      settingFocus(inputRefs);
     }, 0);
-  }, [inputReff, inputValues]);
+  }, [inputRefs, inputValues]);
 
   useEffect(() => {
     const checkIfAllInputsHaveValues = Object.values(inputValues).every(
@@ -118,7 +123,8 @@ const PasswordInput = ({password, onSuccess}) => {
   }, [inputValues, checkInputsValues]);
 
   useEffect(() => {
-    setInputRef(inputRef);
+    // setInputRef(inputRef);
+    dispatch({type: "SET_REFS", payload: inputRef});
   }, [inputRef]);
 
   useEffect(() => {
@@ -148,7 +154,7 @@ const PasswordInput = ({password, onSuccess}) => {
         disabled={!isActive(index)}
         onChange={handleChange}
         value={inputValues[index]}
-        type={passwordShown ? "text" : "password"}
+        type={passwordVisible ? "text" : "password"}
       />
     );
   });
@@ -157,7 +163,7 @@ const PasswordInput = ({password, onSuccess}) => {
     <>
       {finalInput}
       <button onClick={handleButtonClick}>
-        {passwordShown ? `Hide` : `Show`} password
+        {passwordVisible ? `Hide` : `Show`} password
       </button>
       <button onClick={handleResetClick}>Reset password</button>
       <p>{checkInputsValues()}</p>
@@ -166,4 +172,3 @@ const PasswordInput = ({password, onSuccess}) => {
 };
 
 export default PasswordInput;
-
