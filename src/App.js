@@ -38,3 +38,5 @@ export default App;
 // ile inputów powienien widzieć człowiek od 7 do 14
 // [*,*,p,a,*,*,3] któ©e z liter użytkownik ma podać
 // [0,0,1,1,0,0,1,0,0,0,0,0,0,0,0] któ©e z inputów użytkownik ma odblokowane do wpisania
+
+

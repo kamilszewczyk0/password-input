@@ -10,11 +10,14 @@ import {
 import generatePasswordData from "../generatePasswordData/generatePasswordData";
 import SinglePasswordInput from "../../Components/SinglePasswordInput/SinglePasswordInput.js";
 
+
 const PasswordInput = ({password, onSuccess}) => {
   const [inputsLength, initialStateValues, correctValuesMap] = useMemo(
     () => generatePasswordData(password),
     [password],
   );
+
+  // const [...] = usePassword(password)
 
   const initialReducerValues = {
     inputValues: {...initialStateValues},
@@ -29,16 +32,19 @@ const PasswordInput = ({password, onSuccess}) => {
           inputValues: {...state.inputValues, [action.field]: action.payload},
         };
       case "LOAD_INPUTS":
-        return new Array(action.payload).fill("");
+        return {
+          ...state,
+          inputsToIterate: new Array(action.payload).fill(""),
+        };
       default:
         return state;
     }
   };
 
-  const [{inputValues}, dispatch] = useReducer(reducer, initialReducerValues);
-  console.log(inputValues);
-
-  const [inputsToIterate, setInputFields] = useState([]);
+  const [{inputValues, inputsToIterate}, dispatch] = useReducer(
+    reducer,
+    initialReducerValues,
+  );
   const [passwordShown, setPasswordShown] = useState(false);
 
   const [inputReff, setInputRef] = useState([]);
@@ -117,8 +123,7 @@ const PasswordInput = ({password, onSuccess}) => {
 
   useEffect(() => {
     //montowanie komponenty=u
-    setInputFields(new Array(inputsLength).fill(""));
-    // dispatch({type: "LOAD_INPUTS", payload: inputsLength});
+    dispatch({type: "LOAD_INPUTS", payload: inputsLength});
   }, [inputsLength]);
 
   if (inputsToIterate.length === 0) {
@@ -161,3 +166,4 @@ const PasswordInput = ({password, onSuccess}) => {
 };
 
 export default PasswordInput;
+
