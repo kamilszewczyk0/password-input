@@ -1,5 +1,4 @@
 import {
-  useState,
   useCallback,
   useEffect,
   useMemo,
@@ -9,6 +8,7 @@ import {
 } from "react";
 import generatePasswordData from "../generatePasswordData/generatePasswordData";
 import SinglePasswordInput from "../../Components/SinglePasswordInput/SinglePasswordInput.js";
+import handlers from "../../helpers/handlers/handlers";
 
 const PasswordInput = ({password, onSuccess}) => {
   const [inputsLength, initialStateValues, correctValuesMap] = useMemo(
@@ -59,16 +59,6 @@ const PasswordInput = ({password, onSuccess}) => {
     (_, index) => inputRef.current[index] ?? createRef(),
   );
 
-  const settingFocus = (array) => {
-    if (array.current) {
-      const emptyEnabledInputsArray = array.current.filter(
-        (item) => !item.current.disabled && !item.current.value,
-      );
-      if (emptyEnabledInputsArray.length)
-        emptyEnabledInputsArray[0].current.focus();
-    }
-  };
-
   const checkInputsValues = useCallback(() => {
     const passwordValues = Object.values(correctValuesMap);
     const givenValues = Object.values(inputValues);
@@ -82,36 +72,11 @@ const PasswordInput = ({password, onSuccess}) => {
     return ifAllInputsFilled ? onSuccess(allInputsFilled) : null;
   }, [correctValuesMap, inputValues, onSuccess]);
 
-  const handleChange = useCallback(
-    (e) => {
-      dispatch({
-        type: "ON_CHANGE",
-        field: e.target.name,
-        payload: e.target.value,
-      });
-      settingFocus(inputRefs);
-    },
-    [dispatch, inputRefs],
+  const [handleChange, handleButtonClick, handleResetClick] = handlers(
+    dispatch,
+    inputRefs,
+    inputValues,
   );
-
-  const handleButtonClick = () => {
-    dispatch({type: "SHOW_HIDE_PASSWORD"});
-  };
-
-  const handleResetClick = useCallback(() => {
-    for (const value in inputValues) {
-      if (inputValues.hasOwnProperty(value))
-        dispatch({
-          type: "ON_CHANGE",
-          field: value,
-          payload: "",
-        });
-    }
-
-    setTimeout(() => {
-      settingFocus(inputRefs);
-    }, 0);
-  }, [inputRefs, inputValues]);
 
   useEffect(() => {
     const checkIfAllInputsHaveValues = Object.values(inputValues).every(
@@ -123,7 +88,6 @@ const PasswordInput = ({password, onSuccess}) => {
   }, [inputValues, checkInputsValues]);
 
   useEffect(() => {
-    // setInputRef(inputRef);
     dispatch({type: "SET_REFS", payload: inputRef});
   }, [inputRef]);
 
