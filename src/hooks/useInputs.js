@@ -3,6 +3,13 @@ import generatePasswordData from "../Components/generatePasswordData/generatePas
 import SinglePasswordInput from "../Components/SinglePasswordInput/SinglePasswordInput";
 import handlers from "../helpers/handlers/handlers";
 
+const provideReducerValues = (object) => ({
+  inputValues: {...object},
+  inputsToIterate: [],
+  passwordVisible: false,
+  inputRefs: [],
+});
+
 const reducer = (state, action) => {
   switch (action.type) {
     case "ON_CHANGE":
@@ -47,18 +54,13 @@ const isActive = (array, inputIndex) =>
   array.some((index) => index === inputIndex);
 
 //  HOOK
-const useInputs = (password, onSuccess) => {
+const useInputs = (password) => {
   const [inputsLength, initialStateValues, correctValuesMap] = useMemo(
     () => generatePasswordData(password),
     [password],
   );
 
-  const initialReducerValues = {
-    inputValues: {...initialStateValues},
-    inputsToIterate: [],
-    passwordVisible: false,
-    inputRefs: [],
-  };
+  const initialReducerValues = provideReducerValues(initialStateValues);
 
   const [{inputValues, inputsToIterate, passwordVisible, inputRefs}, dispatch] =
     useReducer(reducer, initialReducerValues);
