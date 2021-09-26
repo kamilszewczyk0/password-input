@@ -11,8 +11,9 @@ const PasswordInput = ({password, onSuccess}) => {
     handleButtonClick,
     handleResetClick,
     checkInputsValues,
-
     finalInput,
+    passwordValues,
+    givenValues,
   ] = useInputs(password, onSuccess);
 
   useEffect(() => {
@@ -31,7 +32,7 @@ const PasswordInput = ({password, onSuccess}) => {
         {passwordVisible ? `Hide` : `Show`} password
       </button>
       <button onClick={handleResetClick}>Reset password</button>
-      <p>{checkInputsValues()}</p>
+      <p>{checkInputsValues(passwordValues, givenValues, onSuccess)}</p>
     </>
   );
 };

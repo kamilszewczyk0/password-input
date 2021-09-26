@@ -30,9 +30,6 @@ const reducer = (state, action) => {
   }
 };
 
-const checkIfAllInputsHaveValues = (values) =>
-  Object.values(values).every((char) => char && char.length !== 0);
-
 const checkInputsValues = (correctValues, providedValues, onSuccess) => {
   const ifAllInputsFilled =
     providedValues && providedValues.every((item) => item && item.length);
@@ -78,14 +75,8 @@ const useInputs = (password, onSuccess) => {
     (_, index) => inputRef.current[index] ?? createRef(),
   );
 
-  useEffect(() => {
-    if (checkIfAllInputsHaveValues(inputValues)) {
-      const passwordValues = Object.values(correctValuesMap);
-      const givenValues = Object.values(inputValues);
-
-      checkInputsValues(passwordValues, givenValues, onSuccess);
-    }
-  }, [inputValues, correctValuesMap, onSuccess]);
+  const passwordValues = Object.values(correctValuesMap);
+  const givenValues = Object.values(inputValues);
 
   const activeIndexesArray = Object.keys(correctValuesMap).map((item) =>
     parseInt(item, 10),
@@ -120,6 +111,8 @@ const useInputs = (password, onSuccess) => {
     handleResetClick,
     checkInputsValues,
     finalInput,
+    passwordValues,
+    givenValues,
   ];
 };
 
