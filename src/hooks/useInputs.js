@@ -2,53 +2,8 @@ import {createRef, useEffect, useMemo, useReducer, useRef} from "react";
 import generatePasswordData from "../Components/generatePasswordData/generatePasswordData";
 import SinglePasswordInput from "../Components/SinglePasswordInput/SinglePasswordInput";
 import handlers from "../helpers/handlers/handlers";
-
-const provideReducerValues = (object) => ({
-  inputValues: {...object},
-  inputsToIterate: [],
-  passwordVisible: false,
-  inputRefs: [],
-});
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case "ON_CHANGE":
-      return {
-        ...state,
-        inputValues: {...state.inputValues, [action.field]: action.payload},
-      };
-    case "LOAD_INPUTS":
-      return {
-        ...state,
-        inputsToIterate: new Array(action.payload).fill(""),
-      };
-    case "SHOW_HIDE_PASSWORD":
-      return {
-        ...state,
-        passwordVisible: !state.passwordVisible,
-      };
-    case "SET_REFS":
-      return {
-        ...state,
-        inputRefs: action.payload,
-      };
-    default:
-      return state;
-  }
-};
-
-const checkInputsValues = (correctValues, providedValues, onSuccess) => {
-  const ifAllInputsFilled =
-    providedValues && providedValues.every((item) => item && item.length);
-
-  const allInputsFilled =
-    correctValues &&
-    correctValues.every(
-      (_, index) => correctValues[index] === providedValues[index],
-    );
-
-  return ifAllInputsFilled ? onSuccess(allInputsFilled) : null;
-};
+import { reducer } from "./useInputs/reducer";
+import {initalState} from "./useInputs/state";
 
 const isActive = (array, inputIndex) =>
   array.some((index) => index === inputIndex);
@@ -60,10 +15,8 @@ const useInputs = (password) => {
     [password],
   );
 
-  const initialReducerValues = provideReducerValues(initialStateValues);
-
   const [{inputValues, inputsToIterate, passwordVisible, inputRefs}, dispatch] =
-    useReducer(reducer, initialReducerValues);
+    useReducer(reducer, initalState);
 
   const [handleChange, handleButtonClick, handleResetClick] = handlers(
     dispatch,
@@ -71,18 +24,31 @@ const useInputs = (password) => {
     inputValues,
   );
 
-  const inputRef = useRef();
+  const inputRef = useRef(null); // <HTMLElement | null>
 
   inputRef.current = inputsToIterate.map(
     (_, index) => inputRef.current[index] ?? createRef(),
   );
 
-  const passwordValues = Object.values(correctValuesMap);
-  const givenValues = Object.values(inputValues);
-
-  const activeIndexesArray = Object.keys(correctValuesMap).map((item) =>
-    parseInt(item, 10),
+  const passwordValues = useMemo(
+    () => Object.values(correctValuesMap),
+    [correctValuesMap],
   );
+  const givenValues = useMemo(() => Object.values(inputValues), [inputValues]);
+
+  const activeIndexesArray = useMemo(
+    () => Object.keys(correctValuesMap).map((item) => parseInt(item, 10)),
+    [correctValuesMap],
+  );
+
+  useEffect(() => {
+    //montowanie komponenty=u
+    dispatch({type: "LOAD_INPUTS", payload: inputsLength});
+  }, [dispatch, inputsLength]);
+
+  useEffect(() => {
+    dispatch({type: "INIT_VALUES", payload: initialStateValues});
+  }, [initialStateValues]);
 
   useEffect(() => {
     dispatch({type: "SET_REFS", payload: inputRef});
@@ -104,14 +70,14 @@ const useInputs = (password) => {
     );
   });
 
+  // const values
+  // const actions
+
   return [
-    inputsLength,
     inputsToIterate,
     passwordVisible,
-    dispatch,
     handleButtonClick,
     handleResetClick,
-    checkInputsValues,
     finalInput,
     passwordValues,
     givenValues,

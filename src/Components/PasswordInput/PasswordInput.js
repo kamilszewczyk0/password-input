@@ -1,25 +1,19 @@
-import {useEffect} from "react";
-
+import { checkInputsValues } from "../../helpers/utils/utils";
 import useInputs from "../../hooks/useInputs";
+
+
+
 
 const PasswordInput = ({password, onSuccess}) => {
   const [
-    inputsLength,
     inputsToIterate,
     passwordVisible,
-    dispatch,
     handleButtonClick,
     handleResetClick,
-    checkInputsValues,
     finalInput,
     passwordValues,
     givenValues,
-  ] = useInputs(password, onSuccess);
-
-  useEffect(() => {
-    //montowanie komponenty=u
-    dispatch({type: "LOAD_INPUTS", payload: inputsLength});
-  }, [dispatch, inputsLength]);
+  ] = useInputs(password);
 
   if (inputsToIterate.length === 0) {
     return null;
@@ -38,3 +32,15 @@ const PasswordInput = ({password, onSuccess}) => {
 };
 
 export default PasswordInput;
+
+// useEffect(() => {
+//   //montowanie komponenty=u
+//   dispatch({type: "LOADING"}); // isBusy - true
+
+//   dispatch({type: "LOAD_INPUTS", payload: inputsLength});
+//   dispatch({type: "LOADING"}); // isBusy - false
+// }, [dispatch, inputsLength]);
+
+// if (inputsToIterate.length === 0) {
+//   return null;
+// // }
