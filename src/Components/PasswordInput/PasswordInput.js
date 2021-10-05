@@ -1,19 +1,13 @@
-import { checkInputsValues } from "../../helpers/utils/utils";
+import {checkInputsValues} from "../../helpers/utils/utils";
 import useInputs from "../../hooks/useInputs";
 
-
-
-
 const PasswordInput = ({password, onSuccess}) => {
-  const [
-    inputsToIterate,
-    passwordVisible,
-    handleButtonClick,
-    handleResetClick,
-    finalInput,
-    passwordValues,
-    givenValues,
-  ] = useInputs(password);
+  const {
+    innerAppState: {inputsToIterate, passwordVisible},
+    givenData: {passwordValues},
+    inputsData: {finalInput, givenValues},
+    actions: {handleButtonClick, handleResetClick},
+  } = useInputs(password);
 
   if (inputsToIterate.length === 0) {
     return null;

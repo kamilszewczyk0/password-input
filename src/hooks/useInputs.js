@@ -2,7 +2,7 @@ import {createRef, useEffect, useMemo, useReducer, useRef} from "react";
 import generatePasswordData from "../Components/generatePasswordData/generatePasswordData";
 import SinglePasswordInput from "../Components/SinglePasswordInput/SinglePasswordInput";
 import handlers from "../helpers/handlers/handlers";
-import { reducer } from "./useInputs/reducer";
+import {reducer} from "./useInputs/reducer";
 import {initalState} from "./useInputs/state";
 
 const isActive = (array, inputIndex) =>
@@ -70,18 +70,27 @@ const useInputs = (password) => {
     );
   });
 
-  // const values
-  // const actions
+  const toReturn = {
+    innerAppState: {
+      inputsToIterate,
+      passwordVisible,
+    },
+    givenData: {
+      passwordValues,
+    },
+    inputsData: {
+      finalInput,
+      givenValues,
+    },
+    actions: {
+      handleButtonClick,
+      handleResetClick,
+    },
+  };
 
-  return [
-    inputsToIterate,
-    passwordVisible,
-    handleButtonClick,
-    handleResetClick,
-    finalInput,
-    passwordValues,
-    givenValues,
-  ];
+  const  {innerAppState, givenData, inputsData, actions} = toReturn;
+  
+  return {innerAppState, givenData, inputsData, actions};
 };
 
 export default useInputs;
