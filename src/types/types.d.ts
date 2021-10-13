@@ -20,6 +20,6 @@ interface IPasswordInputState {
 type ACTIONTYPE =
   | {type: "INIT_VALUES"; payload: IDynamicStringStringObject}
   | {type: "ON_CHANGE"; field: string; payload: string}
-  | {type: "LOAD_INPUTS"}
+  | {type: "LOAD_INPUTS"; payload: number}
   | {type: "SHOW_HIDE_PASSWORD"}
-  | {type: "SET_REFS"};
+  | {type: "SET_REFS"; payload: Array<IRefsOnject>};
