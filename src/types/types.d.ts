@@ -22,4 +22,4 @@ type ACTIONTYPE =
   | {type: "ON_CHANGE"; field: string; payload: string}
   | {type: "LOAD_INPUTS"; payload: number}
   | {type: "SHOW_HIDE_PASSWORD"}
-  | {type: "SET_REFS"; payload: Array<IRefsOnject>};
+  | {type: "SET_REFS"; payload: IRefCollection};
