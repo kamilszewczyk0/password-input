@@ -1,4 +1,4 @@
-export const reducer = (state, action) => {
+export const reducer = (state: IPasswordInputState, action: 'ACTIONTYPE') => {
   switch (action.type) {
     case "INIT_VALUES":
       return {

@@ -1,6 +1,6 @@
-export const initalState = {
-  inputValues: {},
+export const initalState: IPasswordInputState = {
+  inputValues: {} as IDynamicStringStringObject,
   inputsToIterate: [],
   passwordVisible: false,
-  inputRefsCollection: [],
+  inputRefsCollection: {} as IRefCollection,
 };
