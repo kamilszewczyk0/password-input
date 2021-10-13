@@ -1,5 +1,5 @@
 import {createRef, useEffect, useMemo, useReducer, useRef} from "react";
-import generatePasswordData from "../Components/generatePasswordData/generatePasswordData";
+import generatePasswordData from "../Components/generatePasswordData";
 
 import handlers from "../helpers/handlers/handlers";
 import {StyledSinglePasswordInput} from "../styles/SinglePasswordInput/StyledSinglePasswordInput";
@@ -32,6 +32,7 @@ const useInputs = (password) => {
   inputRef.current = inputsToIterate.map(
     (_, index) => inputRef.current[index] ?? createRef(),
   );
+  console.log(inputRef, "inputRef");
   console.log(inputRef.current, "inputRef.current");
   console.log(inputRefsCollection, "inputRefsCollection");
 
