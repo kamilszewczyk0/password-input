@@ -1,7 +1,8 @@
 import {createRef, useEffect, useMemo, useReducer, useRef} from "react";
 import generatePasswordData from "../Components/generatePasswordData/generatePasswordData";
-import SinglePasswordInput from "../Components/SinglePasswordInput/SinglePasswordInput";
+
 import handlers from "../helpers/handlers/handlers";
+import {StyledSinglePasswordInput} from "../styles/SinglePasswordInput/StyledSinglePasswordInput";
 import {reducer} from "./useInputs/reducer";
 import {initalState} from "./useInputs/state";
 
@@ -15,20 +16,24 @@ const useInputs = (password) => {
     [password],
   );
 
-  const [{inputValues, inputsToIterate, passwordVisible, inputRefs}, dispatch] =
-    useReducer(reducer, initalState);
+  const [
+    {inputValues, inputsToIterate, passwordVisible, inputRefsCollection},
+    dispatch,
+  ] = useReducer(reducer, initalState);
 
   const [handleChange, handleButtonClick, handleResetClick] = handlers(
     dispatch,
-    inputRefs,
+    inputRefsCollection,
     inputValues,
   );
 
-  const inputRef = useRef(null); // <HTMLElement | null>
+  const inputRef = useRef(null);
 
   inputRef.current = inputsToIterate.map(
     (_, index) => inputRef.current[index] ?? createRef(),
   );
+  console.log(inputRef.current, "inputRef.current");
+  console.log(inputRefsCollection, "inputRefsCollection");
 
   const passwordValues = useMemo(
     () => Object.values(correctValuesMap),
@@ -56,7 +61,7 @@ const useInputs = (password) => {
 
   const finalInput = inputsToIterate.map((_, index) => {
     return (
-      <SinglePasswordInput
+      <StyledSinglePasswordInput
         autoFocus={index === activeIndexesArray[0]}
         ref={inputRef.current[index]}
         maxLength="1"
@@ -88,8 +93,8 @@ const useInputs = (password) => {
     },
   };
 
-  const  {innerAppState, givenData, inputsData, actions} = toReturn;
-  
+  const {innerAppState, givenData, inputsData, actions} = toReturn;
+
   return {innerAppState, givenData, inputsData, actions};
 };
 

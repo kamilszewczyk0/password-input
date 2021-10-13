@@ -23,7 +23,7 @@ export const reducer = (state, action) => {
     case "SET_REFS":
       return {
         ...state,
-        inputRefs: action.payload,
+        inputRefsCollection: action.payload,
       };
     default:
       return state;

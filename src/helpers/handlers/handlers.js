@@ -20,6 +20,10 @@ const handlers = (dispatch, ref, valuesObject) => {
 
   const handleButtonClick = () => {
     dispatch({type: "SHOW_HIDE_PASSWORD"});
+
+    setTimeout(() => {
+      settingFocus(ref);
+    }, 0);
   };
 
   const handleResetClick = () => {
