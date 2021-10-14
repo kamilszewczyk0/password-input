@@ -2,7 +2,6 @@ import {createRef, useEffect, useMemo, useReducer, useRef} from "react";
 import generatePasswordData from "../Components/generatePasswordData";
 
 import handlers from "../helpers/handlers/handlers";
-import {StyledSinglePasswordInput} from "../styles/SinglePasswordInput/StyledSinglePasswordInput";
 import {reducer} from "./useInputs/reducer";
 import {initalState} from "./useInputs/state";
 
@@ -60,22 +59,6 @@ const useInputs = (password) => {
     dispatch({type: "SET_REFS", payload: inputRef});
   }, [dispatch, inputRef]);
 
-  const finalInput = inputsToIterate.map((_, index) => {
-    return (
-      <StyledSinglePasswordInput
-        autoFocus={index === activeIndexesArray[0]}
-        ref={inputRef.current[index]}
-        maxLength="1"
-        key={index}
-        name={index}
-        disabled={!isActive(activeIndexesArray, index)}
-        onChange={handleChange}
-        value={inputValues[index]}
-        type={passwordVisible ? "text" : "password"}
-      />
-    );
-  });
-
   const toReturn = {
     innerAppState: {
       inputsToIterate,
@@ -85,7 +68,6 @@ const useInputs = (password) => {
       passwordValues,
     },
     inputsData: {
-      finalInput,
       givenValues,
     },
     actions: {

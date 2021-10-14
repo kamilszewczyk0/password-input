@@ -1,5 +1,6 @@
 import {checkInputsValues} from "../helpers/utils/utils";
 import useInputs from "../hooks/useInputs";
+import { StyledSinglePasswordInput } from "../styles/SinglePasswordInput/StyledSinglePasswordInput";
 
 const PasswordInput = ({
   password,
@@ -11,7 +12,7 @@ const PasswordInput = ({
   const {
     innerAppState: {inputsToIterate, passwordVisible},
     givenData: {passwordValues},
-    inputsData: {finalInput, givenValues},
+    inputsData: { givenValues},
     actions: {handleButtonClick, handleResetClick},
   } = useInputs(password);
 
@@ -21,7 +22,21 @@ const PasswordInput = ({
 
   return (
     <>
-      {finalInput}
+      {inputsToIterate.map((_, index) => {
+    return (
+      <StyledSinglePasswordInput
+        autoFocus={index === activeIndexesArray[0]}
+        ref={inputRef.current[index]}
+        maxLength="1"
+        key={index}
+        name={index}
+        disabled={!isActive(activeIndexesArray, index)}
+        onChange={handleChange}
+        value={inputValues[index]}
+        type={passwordVisible ? "text" : "password"}
+      />
+    );
+  });}
       <button onClick={handleButtonClick}>
         {passwordVisible ? `Hide` : `Show`} password
       </button>
