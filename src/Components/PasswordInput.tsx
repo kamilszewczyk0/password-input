@@ -6,7 +6,7 @@ const PasswordInput = ({
   onSuccess,
 }: {
   password: string;
-  onSuccess: (boolean: boolean) => string | null;
+  onSuccess: OnSuccess;
 }) => {
   const {
     innerAppState: {inputsToIterate, passwordVisible},

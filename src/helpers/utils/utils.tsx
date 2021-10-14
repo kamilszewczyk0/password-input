@@ -1,4 +1,8 @@
-export const checkInputsValues = (correctValues, providedValues, onSuccess) => {
+export const checkInputsValues = (
+  correctValues: string[],
+  providedValues: string[],
+  onSuccess: OnSuccess,
+): string | null => {
   const ifAllInputsFilled =
     providedValues && providedValues.every((item) => item && item.length);
 

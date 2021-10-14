@@ -2,6 +2,8 @@ interface IDynamicStringStringObject {
   [k: string]: string;
 }
 
+type OnSuccess = (boolean: boolean) => string | null;
+
 interface ISingeRef {
   current: HTMLElement;
 }
