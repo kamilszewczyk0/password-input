@@ -32,13 +32,16 @@ const useInputs = (password: string) => {
     (_, index) => inputRef.current![index] ?? createRef(),
   );
 
-  const passwordValues = useMemo(
+  const passwordValues: string[] = useMemo(
     () => Object.values(correctValuesMap),
     [correctValuesMap],
   );
-  const givenValues = useMemo(() => Object.values(inputValues), [inputValues]);
+  const givenValues: string[] = useMemo(
+    () => Object.values(inputValues),
+    [inputValues],
+  );
 
-  const activeIndexesArray = useMemo(
+  const activeIndexesArray: number[] = useMemo(
     () => Object.keys(correctValuesMap).map((item) => parseInt(item, 10)),
     [correctValuesMap],
   );
@@ -56,7 +59,9 @@ const useInputs = (password: string) => {
     dispatch({type: "SET_REFS", payload: inputRef});
   }, [dispatch, inputRef]);
 
-  const toReturn = {
+
+
+  const toReturn: IToReturn = {
     innerAppState: {
       inputsToIterate,
       passwordVisible,
