@@ -59,26 +59,31 @@ const useInputs = (password) => {
     dispatch({type: "SET_REFS", payload: inputRef});
   }, [dispatch, inputRef]);
 
-  const toReturn = {
-    innerAppState: {
-      inputsToIterate,
-      passwordVisible,
-    },
-    givenData: {
-      passwordValues,
-    },
-    inputsData: {
-      givenValues,
-    },
-    actions: {
-      handleButtonClick,
-      handleResetClick,
-    },
-  };
+    const toReturn = {
+      innerAppState: {
+        inputsToIterate,
+        passwordVisible,
+      },
+      givenData: {
+        passwordValues,
+        activeIndexesArray,
+        isActive,
+        inputRef,
+        inputValues,
+      },
+      inputsData: {
+        givenValues,
+      },
+      actions: {
+        handleButtonClick,
+        handleResetClick,
+        handleChange,
+      },
+    };
 
-  const {innerAppState, givenData, inputsData, actions} = toReturn;
+    const {innerAppState, givenData, inputsData, actions} = toReturn;
 
-  return {innerAppState, givenData, inputsData, actions};
+    return {innerAppState, givenData, inputsData, actions};
 };
 
 export default useInputs;

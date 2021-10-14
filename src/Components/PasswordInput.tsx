@@ -8,7 +8,7 @@ const PasswordInput = ({
 }: {
   password: string;
   onSuccess: OnSuccess;
-}) => {
+}): JSX.Element | null => {
   const {
     innerAppState: {inputsToIterate, passwordVisible},
     givenData: {passwordValues},
