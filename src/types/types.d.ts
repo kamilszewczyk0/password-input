@@ -5,7 +5,7 @@ interface IDynamicStringStringObject {
 type OnSuccess = (boolean: boolean) => string | null;
 
 interface ISingeRef {
-  current: HTMLElement | null;
+  current: HTMLInputElement | null;
 }
 
 interface IRefCollection {

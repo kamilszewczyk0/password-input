@@ -1,19 +1,26 @@
+import React from "react";
+
 const handlers = (
   dispatch: React.Dispatch<ACTIONTYPE>,
   ref: IRefCollection,
   valuesObject: IDynamicStringStringObject,
-) => {
-  const settingFocus = (array) => {
-    if (array.current) {
-      const emptyEnabledInputsArray = array.current.filter(
-        (item) => !item.current.disabled && !item.current.value,
-      );
+): [
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
+  handleButtonClick: (e: React.MouseEvent) => void,
+  handleResetClick: (e: React.MouseEvent) => void,
+] => {
+  const settingFocus = (element: IRefCollection): void => {
+    if (element.current) {
+      const emptyEnabledInputsArray = element.current.filter((item) => {
+        return item.current && !item.current.disabled && !item.current.value;
+      });
       if (emptyEnabledInputsArray.length)
-        emptyEnabledInputsArray[0].current.focus();
+        emptyEnabledInputsArray[0].current &&
+          emptyEnabledInputsArray[0].current.focus();
     }
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     dispatch({
       type: "ON_CHANGE",
       field: e.target.name,
@@ -22,7 +29,7 @@ const handlers = (
     settingFocus(ref);
   };
 
-  const handleButtonClick = () => {
+  const handleButtonClick = (e: React.MouseEvent): void => {
     dispatch({type: "SHOW_HIDE_PASSWORD"});
 
     setTimeout(() => {
@@ -30,7 +37,7 @@ const handlers = (
     }, 0);
   };
 
-  const handleResetClick = () => {
+  const handleResetClick = (e: React.MouseEvent): void => {
     for (const value in valuesObject) {
       if (valuesObject.hasOwnProperty(value))
         dispatch({
