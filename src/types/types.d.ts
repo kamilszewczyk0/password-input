@@ -5,11 +5,11 @@ interface IDynamicStringStringObject {
 type OnSuccess = (boolean: boolean) => string | null;
 
 interface ISingeRef {
-  current: HTMLElement;
+  current: HTMLElement | null;
 }
 
 interface IRefCollection {
-  current: ISingeRef[];
+  current: ISingeRef[] | null;
 }
 
 interface IPasswordInputState {
@@ -25,3 +25,4 @@ type ACTIONTYPE =
   | {type: "LOAD_INPUTS"; payload: number}
   | {type: "SHOW_HIDE_PASSWORD"}
   | {type: "SET_REFS"; payload: IRefCollection};
+

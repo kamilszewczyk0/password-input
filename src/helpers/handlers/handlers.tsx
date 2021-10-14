@@ -1,4 +1,8 @@
-const handlers = (dispatch, ref, valuesObject) => {
+const handlers = (
+  dispatch: React.Dispatch<ACTIONTYPE>,
+  ref: IRefCollection,
+  valuesObject: IDynamicStringStringObject,
+) => {
   const settingFocus = (array) => {
     if (array.current) {
       const emptyEnabledInputsArray = array.current.filter(

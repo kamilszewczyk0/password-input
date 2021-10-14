@@ -5,11 +5,11 @@ import handlers from "../helpers/handlers/handlers";
 import {reducer} from "./useInputs/reducer";
 import {initalState} from "./useInputs/state";
 
-const isActive = (array, inputIndex) =>
+const isActive = (array: number[], inputIndex: number): boolean =>
   array.some((index) => index === inputIndex);
 
 //  HOOK
-const useInputs = (password) => {
+const useInputs = (password: string) => {
   const [inputsLength, initialStateValues, correctValuesMap] = useMemo(
     () => generatePasswordData(password),
     [password],
@@ -26,14 +26,11 @@ const useInputs = (password) => {
     inputValues,
   );
 
-  const inputRef = useRef(null);
+  const inputRef = useRef<ISingeRef[] | null>(null);
 
   inputRef.current = inputsToIterate.map(
-    (_, index) => inputRef.current[index] ?? createRef(),
+    (_, index) => inputRef.current![index] ?? createRef(),
   );
-  console.log(inputRef, "inputRef");
-  console.log(inputRef.current, "inputRef.current");
-  console.log(inputRefsCollection, "inputRefsCollection");
 
   const passwordValues = useMemo(
     () => Object.values(correctValuesMap),
@@ -59,31 +56,31 @@ const useInputs = (password) => {
     dispatch({type: "SET_REFS", payload: inputRef});
   }, [dispatch, inputRef]);
 
-    const toReturn = {
-      innerAppState: {
-        inputsToIterate,
-        passwordVisible,
-      },
-      givenData: {
-        passwordValues,
-        activeIndexesArray,
-        isActive,
-        inputRef,
-        inputValues,
-      },
-      inputsData: {
-        givenValues,
-      },
-      actions: {
-        handleButtonClick,
-        handleResetClick,
-        handleChange,
-      },
-    };
+  const toReturn = {
+    innerAppState: {
+      inputsToIterate,
+      passwordVisible,
+    },
+    givenData: {
+      passwordValues,
+      activeIndexesArray,
+      isActive,
+      inputRef,
+      inputValues,
+    },
+    inputsData: {
+      givenValues,
+    },
+    actions: {
+      handleButtonClick,
+      handleResetClick,
+      handleChange,
+    },
+  };
 
-    const {innerAppState, givenData, inputsData, actions} = toReturn;
+  const {innerAppState, givenData, inputsData, actions} = toReturn;
 
-    return {innerAppState, givenData, inputsData, actions};
+  return {innerAppState, givenData, inputsData, actions};
 };
 
 export default useInputs;
