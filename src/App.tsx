@@ -1,6 +1,6 @@
 import PasswordInput from "./Components/PasswordInput";
 
-const pass: string = "qwerty";
+const pass: string = "password";
 const onSuccess = (boolean: boolean): string | null => {
   switch (boolean) {
     case true:
@@ -15,6 +15,7 @@ const onSuccess = (boolean: boolean): string | null => {
 function App() {
   return (
     <div>
+      <p>Correct password: {pass}</p>
       <PasswordInput password={pass} onSuccess={onSuccess} />
     </div>
   );
